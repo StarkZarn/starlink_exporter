@@ -20,17 +20,17 @@ builds:
       - 7
 
 archives:
-  - name_template: "{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      amd64: x86_64
-    format_overrides:
-      - goos: windows
-        format: zip
-    files:
-      - none*
+  #  - name_template: "{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+  #    replacements:
+  #      darwin: Darwin
+  #      linux: Linux
+  #      windows: Windows
+  #      amd64: x86_64
+  #    format_overrides:
+  #      - goos: windows
+  #        format: zip
+  #    files:
+  #      - none*
 
   - name_template: >-
       {{ .ProjectName }}_v{{ .Version }}_
