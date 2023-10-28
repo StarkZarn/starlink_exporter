@@ -24,8 +24,6 @@ jobs:
 
       - name: Lint
         uses: golangci/golangci-lint-action@v3
-        with:
-          skip-go-installation: true
 
       - name: Build
         uses: goreleaser/goreleaser-action@v5
