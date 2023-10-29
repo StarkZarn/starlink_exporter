@@ -53,6 +53,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: starkzarn/starlink_exporter:latest
+          tags: ghcr.io/starkzarn/starlink_exporter:latest
           push: true
 
