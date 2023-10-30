@@ -36,23 +36,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: docker buildx setup
-        uses: docker/setup-buildx-action@v3
-
-      - name: login to ghcr
-        uses: docker/login-action@v3
-        with:
-          registry: https://ghcr.io
-          username: StarkZarn
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          tags: ghcr.io/starkzarn/starlink_exporter:latest
-          push: true
 
