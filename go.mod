@@ -1,4 +1,4 @@
-module github.com/sysdigdan/starlink_exporter
+module github.com/starkzarn/starlink_exporter
 
 go 1.18
 
@@ -6,6 +6,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/prometheus/client_golang v1.18.0
 	github.com/sirupsen/logrus v1.9.3
+	github.com/sysdigdan/starlink_exporter v1.0.0
 	google.golang.org/grpc v1.60.1
 )
 
