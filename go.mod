@@ -1,6 +1,6 @@
 module github.com/starkzarn/starlink_exporter
 
-go 1.22
+go 1.23
 
 require (
 	github.com/golang/protobuf v1.5.4
