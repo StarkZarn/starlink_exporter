@@ -259,30 +259,38 @@ type Exporter struct {
 
 // New returns an initialized Exporter.
 func New(address string) (*Exporter, error) {
-	ctx, connCancel := context.WithTimeout(context.Background(), time.Second*3)
-	defer connCancel()
-	conn, err := grpc.DialContext(ctx, address, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
-	if err != nil {
-		return nil, fmt.Errorf("error creating underlying gRPC connection to starlink dish: %s", err.Error())
-	}
+        // Context for the connection attempt
+        ctx, connCancel := context.WithTimeout(context.Background(), time.Second*3)
+        defer connCancel()
 
-	ctx, HandleCancel := context.WithTimeout(context.Background(), time.Second*1)
-	defer HandleCancel()
-	resp, err := device.NewDeviceClient(conn).Handle(ctx, &device.Request{
-		Request: &device.Request_GetDeviceInfo{},
-	})
+        // Replace grpc.DialContext with grpc.NewClient
+        conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+        if err != nil {
+                return nil, fmt.Errorf("error creating underlying gRPC connection to starlink dish: %s", err.Error())
+        }
 
-	if err != nil {
-		return nil, fmt.Errorf("could not collect inital information from dish: %s", err.Error())
-	}
+        // Context for making the gRPC call
+        ctx, handleCancel := context.WithTimeout(context.Background(), time.Second*1)
+        defer handleCancel()
 
-	return &Exporter{
-		Conn:        conn,
-		Client:      device.NewDeviceClient(conn),
-		DishID:      resp.GetGetDeviceInfo().GetDeviceInfo().GetId(),
-		CountryCode: resp.GetGetDeviceInfo().GetDeviceInfo().GetCountryCode(),
-	}, nil
+        // Call to the device using the new connection
+        resp, err := device.NewDeviceClient(conn).Handle(ctx, &device.Request{
+                Request: &device.Request_GetDeviceInfo{},
+        })
+
+        if err != nil {
+                return nil, fmt.Errorf("could not collect initial information from dish: %s", err.Error())
+        }
+
+        // Return the Exporter with the necessary details
+        return &Exporter{
+                Conn:        conn,
+                Client:      device.NewDeviceClient(conn),
+                DishID:      resp.GetGetDeviceInfo().GetDeviceInfo().GetId(),
+                CountryCode: resp.GetGetDeviceInfo().GetDeviceInfo().GetCountryCode(),
+        }, nil
 }
+
 
 // Describe describes all the metrics ever exported by the Starlink exporter. It
 // implements prometheus.Collector.
